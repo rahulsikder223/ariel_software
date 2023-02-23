@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="!showDetails">
     <div class="info">
         <label class="label">Please tell us about yourself. <i class="mandatory">*</i></label>
         <textarea class="info-body" [(ngModel)]="generalInformation"></textarea>
@@ -21,8 +21,10 @@
     <div class="actions">
         <button type="button" class="btn btn-primary" (click)="toggleOpenAddQuestionModal(true)">Add New
             Question</button>
-        <button type="button" class="btn btn-success pull-right">Review My Answers</button>
+        <button type="button" class="btn btn-success pull-right" (click)="reviewAnswer()">Review My Answers</button>
     </div>
 </div>
 
-<question-modal [openModal]="openAddQuestionModal" (closed)="toggleOpenAddQuestionModal($event)"></question-modal>
+<question-modal [openModal]="openAddQuestionModal" (closed)="onQuestionModalClosed($event)"></question-modal>
+<view-details [personalInformation]="personalInformationObject" [questions]="questionDetails" (back)="showDetails=$event"
+    *ngIf="showDetails"></view-details>

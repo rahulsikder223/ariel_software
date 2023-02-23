@@ -1,0 +1,46 @@
+.container {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #ffffff;
+    width: 40%;
+    border: 1px solid #9d9d9d;
+
+    .info {
+        margin-bottom: 25px;
+
+        .question-number {
+            font-weight: 600;
+            margin: 20px 0px 10px;
+        }
+
+        .label {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .info-body {
+            width: 100%;
+            border-color: #ccccdb;
+            border-radius: 4px;
+        }
+
+        .detail-container {
+            margin-bottom: 10px;
+
+            .detail {
+                font-weight: 600;
+                width: 20%;
+            }
+
+            .options-container {
+                display: inline-block;
+                vertical-align: top;
+
+                .correct {
+                    background-color: #bbffd7;
+                }
+            }
+        }
+    }
+}

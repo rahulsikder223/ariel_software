@@ -10,11 +10,36 @@
             </button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                 <button *ngFor="let type of questionTypes; let i = index;" ngbDropdownItem
-                (click)="selectedType=type">{{type}}</button>
+                    (click)="selectedType=type">{{type}}</button>
             </div>
         </div>
+        <textarea class="question-body" placeholder="Type your question here..." [(ngModel)]="question"></textarea>
+        <textarea class="question-body" placeholder="Type your answer here..." *ngIf="selectedType=='Paragraph'"
+            [(ngModel)]="answer"></textarea>
+        <ng-container *ngIf="selectedType=='Multiple Choice'">
+            <div *ngFor="let option of options; let i = index;" class="option-container">
+                <input class="form-check-input correct-checkbox" type="checkbox" [(ngModel)]="option.correct" id="correct">
+                <textarea [(ngModel)]="option.value" class="question-body option"
+                    placeholder="Type your option here..."></textarea>
+            </div>
+            <label class="add-option" (click)="addOption()" [class.disabled]="options.length >= 5">
+                + Add Another Option
+            </label>
+            <div class="aux-options">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="allowUserAnswer" id="allow-user-answer">
+                <label class="form-check-label" for="allow-user-answer">
+                    Allow users to specify their own answer.
+                </label>
+            </div>
+            <div class="aux-options">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="isFieldRequired" id="field-required">
+                <label class="form-check-label" for="field-required">
+                    This field is required.
+                </label>
+            </div>
+        </ng-container>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark">Save</button>
+        <button type="button" class="btn btn-primary" (click)="saveQuestion()">Submit</button>
     </div>
 </ng-template>

@@ -1,0 +1,45 @@
+<div class="container" *ngIf="personalInformation">
+    <div class="info">
+        <label class="label">Please tell us about yourself. <i class="mandatory">*</i></label>
+        <p class="info-body">{{personalInformation.generalInformation}}</p>
+    </div>
+    <div class="info">
+        <label class="label">Please select the languages you know. <i class="mandatory">*</i></label>
+        <div *ngFor="let language of personalInformation.languages; let i = index;">
+            <label class="form-check-label">
+                {{language}}
+            </label>
+        </div>
+    </div>
+    <div class="info">
+        <label class="label">Questions:</label>
+        <div *ngFor="let question of questions; let i = index;">
+            <div class="question-number">Q.{{i + 1}}</div>
+            <div class="detail-container">
+                <label class="detail">Type:</label>
+                <label>{{question.type}}</label>
+            </div>
+            <div class="detail-container">
+                <label class="detail">Question:</label>
+                <label>{{question.body}}</label>
+            </div>
+            <ng-container *ngIf="question.type == 'Paragraph'">
+                <div class="detail-container">
+                    <label class="detail">Answer:</label>
+                    <label>{{question.answer}}</label>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="question.type == 'Multiple Choice'">
+                <div class="detail-container">
+                    <label class="detail">Options:</label>
+                    <div class="options-container">
+                        <div *ngFor="let option of question.options; let i = index;">
+                            <label [class.correct]="question.correctOptions[i]">{{option}}</label>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <button class="btn btn-outline-primary" (click)="goBack()">Return to Form Builder</button>
+</div>

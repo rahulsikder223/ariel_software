@@ -7,12 +7,13 @@ import { QuestionModalComponent } from './question-modal/question-modal.componen
 import { DataService } from '../utilities/data-service/data-service.service';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { ViewDetailsComponent } from './view-details/view-details.component';
 
 @NgModule({
   declarations: [
     PersonalInformationComponent,
-    QuestionModalComponent
+    QuestionModalComponent,
+    ViewDetailsComponent
   ],
   imports: [
     CommonModule,
