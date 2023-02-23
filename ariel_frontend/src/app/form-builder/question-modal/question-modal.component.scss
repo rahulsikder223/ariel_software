@@ -1,0 +1,9 @@
+.full-width {
+    width: 100%;
+    text-align: left;
+
+    ::after {
+        float: right;
+        margin-top: 10px;
+    }
+}

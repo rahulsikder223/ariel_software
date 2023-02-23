@@ -1,0 +1,37 @@
+.container {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #ffffff;
+    width: 40%;
+    border: 1px solid #9d9d9d;
+
+    .info {
+        margin-bottom: 25px;
+
+        .label {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .info-body {
+            width: 100%;
+            min-height: 80px;
+        }
+
+        .form-check-input {
+            margin-right: 10px;
+        }
+
+        .other-language {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+
+    .actions {
+        .pull-right {
+            float: right;
+        }
+    }
+}

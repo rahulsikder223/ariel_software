@@ -1,0 +1,20 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add a New Question</h4>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+    </div>
+    <div class="modal-body">
+        <div ngbDropdown>
+            <button type="button" class="btn btn-outline-primary full-width" id="dropdownBasic1" ngbDropdownToggle>
+                {{selectedType}}
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button *ngFor="let type of questionTypes; let i = index;" ngbDropdownItem
+                (click)="selectedType=type">{{type}}</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark">Save</button>
+    </div>
+</ng-template>
