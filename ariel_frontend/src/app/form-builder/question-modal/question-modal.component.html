@@ -13,14 +13,14 @@
                     (click)="selectedType=type">{{type}}</button>
             </div>
         </div>
-        <textarea class="question-body" placeholder="Type your question here..." [(ngModel)]="question"></textarea>
-        <textarea class="question-body" placeholder="Type your answer here..." *ngIf="selectedType=='Paragraph'"
-            [(ngModel)]="answer"></textarea>
+        <textarea class="question-body" placeholder="Type your question here..." [(ngModel)]="question" (keydown)="checkQuestion()" [class.error]="questionError"></textarea>
+        <textarea class="question-body" placeholder="Type your answer here..." *ngIf="selectedType=='Paragraph'" [class.error]="answerError"
+            [(ngModel)]="answer" (keydown)="checkAnswer()"></textarea>
         <ng-container *ngIf="selectedType=='Multiple Choice'">
             <div *ngFor="let option of options; let i = index;" class="option-container">
                 <input class="form-check-input correct-checkbox" type="checkbox" [(ngModel)]="option.correct" id="correct">
-                <textarea [(ngModel)]="option.value" class="question-body option"
-                    placeholder="Type your option here..."></textarea>
+                <textarea [(ngModel)]="option.value" class="question-body option" (keydown)="checkOptions(i)"
+                    placeholder="Type your option here..." [class.error]="optionsError[i].value"></textarea>
             </div>
             <label class="add-option" (click)="addOption()" [class.disabled]="options.length >= 5">
                 + Add Another Option

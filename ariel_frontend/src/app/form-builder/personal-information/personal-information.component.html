@@ -1,22 +1,25 @@
 <div class="container" *ngIf="!showDetails">
     <div class="info">
         <label class="label">Please tell us about yourself. <i class="mandatory">*</i></label>
-        <textarea class="info-body" [(ngModel)]="generalInformation"></textarea>
+        <textarea class="info-body" [(ngModel)]="generalInformation" (keydown)="checkGeneralInformation($event)"
+            [class.error]="generalInformationError"></textarea>
     </div>
     <div class="info">
         <label class="label">Please select the languages you know. <i class="mandatory">*</i></label>
         <div *ngFor="let language of languages; let i = index;">
-            <input class="form-check-input" type="checkbox" value="" id="lang + {{i}}"
-                [(ngModel)]="languagesChecked[i]">
+            <input class="form-check-input" type="checkbox" value="" id="lang + {{i}}" [(ngModel)]="languagesChecked[i]"
+                [class.error]="languagesCheckedError" (click)="checkLanguages()">
             <label class="form-check-label" for="lang + {{i}}">
                 {{language}}
             </label>
         </div>
-        <input class="form-check-input" type="checkbox" [(ngModel)]="otherLanguageChecked" id="other-lang">
+        <input class="form-check-input" type="checkbox" [class.error]="languagesCheckedError" (click)="checkLanguages()"
+            [(ngModel)]="otherLanguageChecked" id="other-lang">
         <label class="form-check-label" for="other-lang">
             Other
         </label>
-        <input type="text" *ngIf="otherLanguageChecked" class="other-language" [(ngModel)]="otherLanguage">
+        <input type="text" *ngIf="otherLanguageChecked" class="other-language" [(ngModel)]="otherLanguage"
+        (keydown)="checkOtherLanguages()" [class.error]="otherLanguageBlankError">
     </div>
     <div class="actions">
         <button type="button" class="btn btn-primary" (click)="toggleOpenAddQuestionModal(true)">Add New
@@ -26,5 +29,5 @@
 </div>
 
 <question-modal [openModal]="openAddQuestionModal" (closed)="onQuestionModalClosed($event)"></question-modal>
-<view-details [personalInformation]="personalInformationObject" [questions]="questionDetails" (back)="showDetails=$event"
-    *ngIf="showDetails"></view-details>
+<view-details [personalInformation]="personalInformationObject" [questions]="questionDetails"
+    (back)="showDetails=$event" *ngIf="showDetails"></view-details>

@@ -18,6 +18,11 @@ export class PersonalInformationComponent {
   openAddQuestionModal: boolean = false;
   showDetails: boolean = false;
 
+  // Validations...
+  generalInformationError: boolean = false;
+  languagesCheckedError: boolean = false;
+  otherLanguageBlankError: boolean = false;
+
   personalInformationObject: PersonalInformationModel = new PersonalInformationModel();
   questionDetails: Array<any> = new Array<any>();
 
@@ -40,19 +45,68 @@ export class PersonalInformationComponent {
   }
 
   reviewAnswer() {
-    this.personalInformationObject = new PersonalInformationModel();
-    this.personalInformationObject.generalInformation = this.generalInformation;
-    
+    this.validate();
+
+    if (!this.generalInformationError && !this.languagesCheckedError && !this.otherLanguageBlankError) {
+      this.personalInformationObject = new PersonalInformationModel();
+      this.personalInformationObject.generalInformation = this.generalInformation;
+      
+      for (let i = 0; i < this.languagesChecked.length; i++) {
+        if (this.languagesChecked[i]) {
+          this.personalInformationObject.languages.push(this.languages[i]);
+        }
+      }
+  
+      if (this.otherLanguageChecked && this.otherLanguage.trim() != "") {
+        this.personalInformationObject.languages.push(this.otherLanguage);
+      }
+  
+      this.showDetails = true;
+    }
+  }
+
+  checkGeneralInformation(event: Event) {
+    let value = (event.target as HTMLInputElement).value;
+
+    if (value != null && value.trim() != "") {
+      this.generalInformationError = false;
+    }
+  }
+
+  checkLanguages() {
+    setTimeout(() => {
+      for (let i = 0; i < this.languagesChecked.length; i++) {
+        if (this.languagesChecked[i] || this.otherLanguageChecked) {
+          this.languagesCheckedError = false;
+        }
+      }
+    });
+  }
+
+  checkOtherLanguages() {
+    if (!this.otherLanguageChecked || this.otherLanguageChecked && this.otherLanguage != null && this.otherLanguage.trim() != "") {
+      this.otherLanguageBlankError = false;
+    }
+  }
+
+  validate() {
+    if (this.generalInformation == null || this.generalInformation.trim() == "") {
+      this.generalInformationError = true;
+    }
+
+    let checkLanguagesError: boolean = true;
     for (let i = 0; i < this.languagesChecked.length; i++) {
-      if (this.languagesChecked[i]) {
-        this.personalInformationObject.languages.push(this.languages[i]);
+      if (this.languagesChecked[i] || this.otherLanguageChecked) {
+        checkLanguagesError = false;
       }
     }
 
-    if (this.otherLanguageChecked && this.otherLanguage.trim() != "") {
-      this.personalInformationObject.languages.push(this.otherLanguage);
+    if (checkLanguagesError) {
+      this.languagesCheckedError = true;
     }
 
-    this.showDetails = true;
+    if (this.otherLanguageChecked && (this.otherLanguage == null || this.otherLanguage.trim() == "")) {
+      this.otherLanguageBlankError = true;
+    }
   }
 }

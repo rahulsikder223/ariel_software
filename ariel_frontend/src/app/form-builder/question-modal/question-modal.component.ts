@@ -23,6 +23,11 @@ export class QuestionModalComponent implements OnChanges {
   isFieldRequired: Boolean = false;
   questionObject: any;
 
+  // Validations...
+  questionError: boolean = false;
+  answerError: boolean = false;
+  optionsError: Array<any> = new Array<any>();
+
   constructor(private modalService: NgbModal, private ds: DataService) {
     this.initOptions();
     this.ds.call(FormBuilderConstants.DummyData.QUESTIONTYPES, "GET").subscribe(response => {
@@ -50,6 +55,10 @@ export class QuestionModalComponent implements OnChanges {
     this.options = new Array<string>();
     this.options.push({ value: "", correct: false });
     this.options.push({ value: "", correct: false });
+
+    this.optionsError = new Array<any>();
+    this.optionsError.push({ value: false });
+    this.optionsError.push({ value: false });
   }
 
   ngOnChanges() {
@@ -73,24 +82,77 @@ export class QuestionModalComponent implements OnChanges {
   addOption() {
     if (this.options.length < 5) {
       this.options.push({ value: "", correct: false });
+      this.optionsError.push({ value: false });
     }
   }
 
   saveQuestion() {
-    if (this.selectedType == FormBuilderConstants.QuestionTypes.PARAGRAPH) {
-      this.questionObject = new ParagraphQuestion();
-      this.questionObject.type = FormBuilderConstants.QuestionTypes.PARAGRAPH;
-      this.questionObject.body = this.question;
-      this.questionObject.answer = this.answer;
+    let validationSuccess = this.validate();
+    if (validationSuccess) {
+      if (this.selectedType == FormBuilderConstants.QuestionTypes.PARAGRAPH) {
+        this.questionObject = new ParagraphQuestion();
+        this.questionObject.type = FormBuilderConstants.QuestionTypes.PARAGRAPH;
+        this.questionObject.body = this.question;
+        this.questionObject.answer = this.answer;
+      }
+      else if (this.selectedType == FormBuilderConstants.QuestionTypes.MULTIPLECHOICE) {
+        this.questionObject = new MultipleChoiceQuestion();
+        this.questionObject.type = FormBuilderConstants.QuestionTypes.MULTIPLECHOICE;
+        this.questionObject.body = this.question;
+        this.questionObject.options = this.options.map(x => x.value);
+        this.questionObject.correctOptions = this.options.map(x => x.correct);
+      }
+      this.closeModal();
     }
-    else if (this.selectedType == FormBuilderConstants.QuestionTypes.MULTIPLECHOICE) {
-      this.questionObject = new MultipleChoiceQuestion();
-      this.questionObject.type = FormBuilderConstants.QuestionTypes.MULTIPLECHOICE;
-      this.questionObject.body = this.question;
-      this.questionObject.options = this.options.map(x => x.value);
-      this.questionObject.correctOptions = this.options.map(x => x.correct);
+  }
+
+  checkOptions(i: number) {
+    setTimeout(() => {
+      if (this.options[i].value != null && this.options[i].value.trim() != "") {
+        this.optionsError[i].value = false;
+      }
+    });
+  }
+
+  checkQuestion() {
+    setTimeout(() => {
+      if (this.question != null && this.question.trim() != "") {
+        this.questionError = false;
+      }
+    });
+  }
+
+  checkAnswer() {
+    setTimeout(() => {
+      if (this.answer != null && this.answer.trim() != "") {
+        this.answerError = false;
+      }
+    });
+  }
+
+  validate() {
+    let validationSuccess: boolean = true;
+
+    if (this.question == null || this.question.trim() == "") {
+      this.questionError = true;
+      validationSuccess = false;
     }
 
-    this.closeModal();
+    if (this.selectedType == FormBuilderConstants.QuestionTypes.PARAGRAPH
+      && (this.answer == null || this.answer.trim() == "")) {
+      this.answerError = true;
+      validationSuccess = false;
+    }
+
+    if (this.selectedType == FormBuilderConstants.QuestionTypes.MULTIPLECHOICE) {
+      for (let i = 0; i < this.optionsError.length; i++) {
+        if (this.options[i].value == null || this.options[i].value.trim() == "") {
+          this.optionsError[i].value = true;
+          validationSuccess = false;
+        }
+      }
+    }
+
+    return validationSuccess;
   }
 }
